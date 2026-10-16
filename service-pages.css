@@ -59,3 +59,11 @@
   .detail-section>h2 { font-size: 34px; }
   .detail-section { padding-top: 38px; }
 }
+
+/* Long names remain within the shared mobile content width. */
+.detail-layout > *, .detail-card, .detail-hero__in > * { min-width: 0; }
+.detail-copy, .detail-next, .detail-card h3, .detail-section > h2 { overflow-wrap: anywhere; }
+.detail-card__action { display: inline-flex; align-items: center; gap: 8px; }
+.detail-hero .btn { max-width: 100%; white-space: normal; min-height: 52px; height: auto; padding-block: 14px; line-height: 1.3; }
+.breadcrumbs ol { min-width: 0; }
+.breadcrumbs li { min-width: 0; }

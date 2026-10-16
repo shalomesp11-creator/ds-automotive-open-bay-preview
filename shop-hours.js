@@ -51,7 +51,7 @@
         next.setUTCDate(next.getUTCDate() + offset);
         const slots = intervals(next, config);
         if (slots === null) return { state: 'closed', text: `${prefix} — Next opening unconfirmed` };
-        if (slots.length) return { state: 'closed', text: `${prefix} — Opens ${offset === 1 ? 'Tomorrow' : days[next.getUTCDay()]} at ${label(slots[0][0])}` };
+        if (slots.length) return { state: 'closed', text: `${prefix} — Opens ${days[next.getUTCDay()]} at ${label(slots[0][0])}` };
       }
       return { state: 'closed', text: `${prefix} — No upcoming hours confirmed` };
     } catch (_) {

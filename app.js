@@ -92,7 +92,7 @@
     });
     return out;
   }
-  const row = (s, q) => `<li class="svc-row"><a class="svc svc--learn" href="${route(s.id)}"><span class="svc__id">${s.id}</span><span class="svc__name">${q ? hl(s.name, q) : esc(s.name)}</span><span class="svc__go">Learn More</span></a><button type="button" class="svc-request" data-service="${esc(s.name)}" aria-label="Request ${esc(s.name)}">Request Service <span aria-hidden="true">↗</span></button></li>`;
+  const row = (s, q) => `<li class="svc-row"><a class="svc svc--learn" href="${route(s.id)}"><span class="svc__id">${s.id}</span><span class="svc__name">${q ? hl(s.name, q) : esc(s.name)}</span><span class="svc__go">Learn More</span></a><button type="button" class="svc-request" data-service="${esc(s.name)}" aria-label="Request ${esc(s.name)}">Request Service <svg class="i i--arrow" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M7 17 17 7M7 7h10v10"/></svg></button></li>`;
 
   function render() {
     const q = search.value.trim();
@@ -273,7 +273,11 @@
   form.addEventListener('input', progress);
   form.addEventListener('change', progress);
 
+  let requestOpener, requestScroll = 0;
   function openRO(service) {
+    if (ro.open) return;
+    requestOpener = document.activeElement;
+    requestScroll = window.scrollY;
     form.reset(); closeMakes(); clearMake.hidden = true; services = []; $('#ro-err').textContent = '';
     updateInquiry(); picked.classList.remove('is-bad');
     $$('[aria-invalid]', form).forEach(el => el.removeAttribute('aria-invalid'));
@@ -282,15 +286,24 @@
     $('#ro-done').hidden = true; form.classList.remove('is-done');
     const d = form.elements.date; const t = new Date(); t.setDate(t.getDate() + 1); d.min = t.toISOString().slice(0, 10);
     chips();
-    ro.showModal();
+    document.body.style.setProperty('--ro-scroll-top', `-${requestScroll}px`);
     document.body.classList.add('ro-open');
+    fitRequestViewport();
+    ro.showModal();
     $('.ro__body', form).scrollTop = 0;
+    $('.ro__main', form).scrollTop = 0;
   }
   window.openRequest = openRO;
   $$('[data-request]').forEach(b => b.addEventListener('click', () => { closeMenu(); openRO(b.dataset.service || ''); }));
   const close = () => ro.close();
   $$('[data-close]', ro).forEach(b => b.addEventListener('click', close));
-  ro.addEventListener('close', () => { document.body.classList.remove('ro-open'); closeMakes(); form.reset(); services = []; });
+  ro.addEventListener('close', () => {
+    document.body.classList.remove('ro-open');
+    document.body.style.removeProperty('--ro-scroll-top');
+    window.scrollTo({ top: requestScroll, behavior: 'instant' });
+    closeMakes(); form.reset(); services = [];
+    if (requestOpener?.isConnected) requestOpener.focus({ preventScroll: true });
+  });
   ro.addEventListener('click', e => { if (e.target === ro) close(); });
 
   form.addEventListener('submit', e => {
