@@ -3,12 +3,10 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>D&amp;S Automotive Repair Solutions | Website Preview</title>
-<meta name="robots" content="noindex, nofollow">
+<title>D&amp;S Automotive Repair Solutions | Auto Repair Shop in Columbus, Ohio</title>
 <meta name="description" content="Full-service auto repair shop in Columbus, Ohio. Brakes, diagnostics, engine repair, A/C, transmission, suspension, and maintenance for trucks, cars, and SUVs.">
 <meta name="theme-color" content="#0B1830">
 <link rel="preload" as="image" href="assets/bay-raptor.jpg" imagesrcset="assets/bay-raptor-1200.jpg 1200w, assets/bay-raptor.jpg 2400w" imagesizes="(max-width: 860px) 92vw, 52vw">
-<link rel="icon" href="data:,">
 <link rel="stylesheet" href="styles.css">
 </head>
 <body>
@@ -17,8 +15,8 @@
 <!-- ============ UTILITY BAR ============ -->
 <div class="topbar">
   <div class="wrap topbar__in">
-    <p class="topbar__where"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.8l2.6 5.6 6.1.7-4.5 4.2 1.2 6-5.4-3-5.4 3 1.2-6L3.3 9.1l6.1-.7z"/></svg><span class="long">Website design preview ·&nbsp;</span>Columbus, Ohio</p>
-    <p class="topbar__hours"><span class="dot" aria-hidden="true"></span>Demo version<span class="long"> · contact details coming soon</span></p>
+    <p class="topbar__where"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.8l2.6 5.6 6.1.7-4.5 4.2 1.2 6-5.4-3-5.4 3 1.2-6L3.3 9.1l6.1-.7z"/></svg><span class="long">Full-service auto repair ·&nbsp;</span>Columbus, Ohio</p>
+    <p class="topbar__hours" data-shop-hours data-state="unknown" role="status" aria-live="polite" aria-atomic="true"><span class="dot" aria-hidden="true"></span><a href="https://maps.app.goo.gl/gat129U5YUDfvwSGA?g_st=ic" target="_blank" rel="noopener noreferrer" data-hours-text>Hours unconfirmed — Check Google Maps</a></p>
   </div>
 </div>
 
@@ -28,7 +26,7 @@
     <a class="brand" href="#top" aria-label="D&amp;S Automotive Repair Solutions, home">
       <span class="brand__logo"><img src="assets/logo-720.png" alt="D&amp;S Automotive Repair Solutions" width="720" height="480"></span>
     </a>
-    <nav class="nav" aria-label="Main">
+    <nav class="nav" id="main-nav" aria-label="Main">
       <a href="#services">Services</a>
       <a href="#services" data-cat="03">Brakes</a>
       <a href="#services" data-cat="02">Diagnostics</a>
@@ -36,12 +34,13 @@
       <a href="#how">How It Works</a>
       <a href="#visit">Visit the Shop</a>
     </nav>
-    <div class="callblock">
+    <button class="callblock" type="button" data-demo-phone popovertarget="phone-notice" title="Demo number - calling unavailable">
       <svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M6.6 3.5l3 3.3-1.8 2.5c1.2 2.6 3.3 4.7 5.9 5.9l2.5-1.8 3.3 3-1.6 3.1c-.4.7-1.2 1.1-2 .9C9.6 19 5 14.4 3.6 7.9c-.2-.8.2-1.6.9-2z"/></svg>
-      <span><small>Shop phone</small><strong>Coming soon</strong></span>
-    </div>
+      <span><small>Call the shop <span class="callblock__demo">Demo</span></small><strong>(614) 555-0142</strong></span>
+    </button>
     <button class="btn btn--red masthead__cta" type="button" data-request>Schedule Service<svg class="i i--arrow" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h13M13 6l6 6-6 6"/></svg></button>
-    <button class="iconbtn masthead__menu" type="button" aria-label="Open menu" aria-expanded="false" data-menu><span></span><span></span><span></span></button>
+    <button class="iconbtn masthead__call" type="button" data-demo-phone popovertarget="phone-notice" title="Demo number - calling unavailable" aria-label="Call the shop - demo number, calling unavailable"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M6.6 3.5l3 3.3-1.8 2.5c1.2 2.6 3.3 4.7 5.9 5.9l2.5-1.8 3.3 3-1.6 3.1c-.4.7-1.2 1.1-2 .9C9.6 19 5 14.4 3.6 7.9c-.2-.8.2-1.6.9-2z"/></svg></button>
+    <button class="iconbtn masthead__menu" type="button" aria-label="Open menu" aria-expanded="false" aria-controls="main-nav" data-menu><span></span><span></span><span></span></button>
   </div>
 </header>
 
@@ -69,7 +68,7 @@
       <p class="hero__lede">Brakes, check-engine diagnostics, engine work, A/C, transmissions, and routine maintenance — every system on your vehicle, handled by one local shop.</p>
       <div class="hero__ctas">
         <button class="btn btn--red btn--xl" type="button" data-request>Schedule Service<svg class="i i--arrow" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h13M13 6l6 6-6 6"/></svg></button>
-        <a class="btn btn--ghost btn--xl" href="#services">Browse Services</a>
+        <button class="btn btn--ghost btn--xl" type="button" data-demo-phone popovertarget="phone-notice" title="Demo number - calling unavailable"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M6.6 3.5l3 3.3-1.8 2.5c1.2 2.6 3.3 4.7 5.9 5.9l2.5-1.8 3.3 3-1.6 3.1c-.4.7-1.2 1.1-2 .9C9.6 19 5 14.4 3.6 7.9c-.2-.8.2-1.6.9-2z"/></svg>(614) 555-0142</button>
       </div>
       <ul class="hero__facts">
         <li><strong>16</strong><span>Service<br>categories</span></li>
@@ -90,7 +89,7 @@
         <div class="bay__fascia">
           <span class="bay__no">Bay 1</span>
           <span class="bay__sign">Service<br>Entrance</span>
-          <span class="bay__clear">Demo Preview</span>
+          <span class="bay__clear">Clearance 12′-0″</span>
         </div>
         <div class="bay__frame">
           <div class="bay__coil" aria-hidden="true"></div>
@@ -99,8 +98,8 @@
             <canvas class="bay__light" data-live="bay" aria-hidden="true"></canvas>
             <div class="bay__door" aria-hidden="true"><span class="bay__rail"></span></div>
             <figcaption class="bay__ticket">
-              <span class="bay__ticket-k">Preview photo</span>
-              <span class="bay__ticket-v">Stock image · not the D&amp;S shop</span>
+              <span class="bay__ticket-k">Now in Bay 1</span>
+              <span class="bay__ticket-v">Full-size trucks welcome</span>
             </figcaption>
           </div>
           <span class="bay__jamb bay__jamb--l" aria-hidden="true"><i class="bollard"></i></span>
@@ -150,6 +149,7 @@
           <button type="button" data-q="battery">Battery</button>
           <button type="button" data-q="timing belt">Timing belt</button>
         </div>
+        <a class="link catalog-directory" href="services/">Explore all category guides <span aria-hidden="true">↗</span></a>
       </div>
     </header>
 
@@ -206,20 +206,22 @@
 <!-- ============ VISIT ============ -->
 <section class="visit" id="visit" aria-labelledby="visit-title">
   <div class="wrap visit__in">
-    <div>
+    <div class="visit__intro">
       <p class="kicker"><span class="kicker__no">04</span>Visit the Shop</p>
       <h2 id="visit-title">Pull into <em>Bay 1.</em></h2>
-      <p class="visit__addr">D&amp;S Automotive Repair Solutions<br>Columbus, Ohio<br>Street address coming soon</p>
+      <p class="visit__lede">Your next stop for auto repair in Columbus.</p>
+      <button class="btn btn--ghost" type="button" data-request>Request Service</button>
     </div>
-    <dl class="hours">
-      <div><dt>Shop phone</dt><dd>Coming soon</dd></div>
-      <div><dt>Shop hours</dt><dd>Coming soon</dd></div>
-      <div><dt>Address</dt><dd>Coming soon</dd></div>
-    </dl>
-    <div class="visit__ctas">
-      <a class="btn btn--ghost btn--xl" href="#services">Browse Services</a>
-      <button class="btn btn--red btn--xl" type="button" data-request>Schedule Service</button>
-    </div>
+    <article class="location" aria-label="Shop location">
+      <div class="location__sign" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M20 10c0 6-8 12-8 12S4 16 4 10a8 8 0 1 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg><span>Columbus<span>OHIO / USA</span></span></div>
+      <div class="location__info">
+        <p class="location__eyebrow">Find our shop</p>
+        <h3>D&amp;S Automotive Repair Solutions</h3>
+        <p class="visit__addr">3027 S High St<br>Columbus, Ohio 43207</p>
+        <a class="btn btn--red btn--xl" href="https://maps.app.goo.gl/gat129U5YUDfvwSGA?g_st=ic" target="_blank" rel="noopener noreferrer">Get Directions<svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 19L19 5M5 5h14v14"/></svg></a>
+        <a class="location__maplink" href="https://maps.app.goo.gl/gat129U5YUDfvwSGA?g_st=ic" target="_blank" rel="noopener noreferrer">Open in Google Maps <span aria-hidden="true">&#8599;</span></a>
+      </div>
+    </article>
   </div>
 </section>
 </main>
@@ -228,13 +230,13 @@
   <div class="wrap foot__in">
     <img src="assets/logo-720.png" alt="D&amp;S Automotive Repair Solutions" width="180" height="120" loading="lazy">
     <p>© 2026 D&amp;S Automotive Repair Solutions · Columbus, Ohio</p>
-    <p class="foot__note"><strong>DEMO PREVIEW</strong> of a website design concept — not the final site. Phone, hours, and address have not been published yet, and the request form is not connected. Photo: Rana Singh / <a href="https://unsplash.com/photos/a-black-truck-parked-inside-of-a-garage-sz4V3mU5QQs">Unsplash</a>, not a D&amp;S location.</p>
+    <p class="foot__note">Design concept preview. Phone is a demo number; opening hours are pending verification. Hero photo: Rana Singh / Unsplash.</p>
   </div>
 </footer>
 
 <!-- Mobile: always-reachable actions -->
 <div class="dock" role="group" aria-label="Quick actions">
-  <a class="dock__call" href="#services">Services</a>
+  <button class="dock__call" type="button" data-demo-phone popovertarget="phone-notice" title="Demo number - calling unavailable"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M6.6 3.5l3 3.3-1.8 2.5c1.2 2.6 3.3 4.7 5.9 5.9l2.5-1.8 3.3 3-1.6 3.1c-.4.7-1.2 1.1-2 .9C9.6 19 5 14.4 3.6 7.9c-.2-.8.2-1.6.9-2z"/></svg>Call</button>
   <button class="dock__req" type="button" data-request>Schedule Service<svg class="i i--arrow" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h13M13 6l6 6-6 6"/></svg></button>
 </div>
 
@@ -255,9 +257,8 @@
         <li data-step="contact"><span>05</span>Contact</li>
       </ol>
       <div class="ro__shop">
-        <p><strong>Prefer to talk?</strong></p>
-        <span class="ro__shopph">Shop phone coming soon</span>
-        <p>Contact details will be added when the site launches.</p>
+        <p><strong>Repair Order Preview</strong></p>
+        <p>Explore the form. No appointment is booked and no information is sent or saved.</p>
       </div>
     </aside>
 
@@ -265,7 +266,7 @@
       <header class="ro__head">
         <div>
           <h2 id="ro-title">Schedule Service</h2>
-          <p><strong class="demo-note">Demo form — nothing is sent or saved.</strong> The final site will confirm your appointment by phone or text.</p>
+          <p>Demo only. No request is sent or saved. Vehicle details are optional.</p>
         </div>
         <button class="ro__close" type="button" value="cancel" aria-label="Close" data-close>
           <svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg>
@@ -275,17 +276,30 @@
       <div class="ro__body">
         <fieldset class="ro__sec" data-sec="vehicle">
           <legend><span>01</span>Your vehicle</legend>
-          <div class="grid grid--4">
-            <label class="fld"><span>Year</span><select name="year" required><option value="">Year</option></select></label>
-            <label class="fld"><span>Make</span><input name="make" list="makes" placeholder="Ford" required autocomplete="off"></label>
-            <label class="fld fld--2"><span>Model</span><input name="model" placeholder="F-150" required autocomplete="off"></label>
+          <div class="grid vehicle-grid">
+            <label class="fld"><span>Vehicle Year <em>(Optional)</em></span><input name="year" inputmode="numeric" list="vehicle-years" maxlength="4" placeholder="e.g., 1967" aria-describedby="year-help"></label>
+            <div class="fld make-field">
+              <label for="vehicle-make">Vehicle Make <em>(Optional)</em></label>
+              <div class="make-input"><input id="vehicle-make" name="make" role="combobox" aria-autocomplete="list" aria-expanded="false" aria-controls="make-options" aria-describedby="make-help make-status" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="Search or enter a make" maxlength="80"><button id="clear-make" type="button" aria-label="Clear vehicle make" hidden>&times;</button></div>
+              <div class="make-menu" id="make-menu" hidden><ul id="make-options" role="listbox" aria-label="Vehicle makes"></ul><p id="make-empty" hidden>No matching makes. Keep your entry to use a different make.</p></div>
+              <span id="make-status" class="sr" role="status" aria-live="polite"></span>
+            </div>
+            <label class="fld vehicle-model"><span>Vehicle Model <em>(Optional)</em></span><input name="model" placeholder="e.g., F-150, Camry, C-Class" autocomplete="off" maxlength="80"></label>
           </div>
+          <p class="field-help" id="year-help">Enter a four-digit year, or choose a suggestion. Classic vehicles welcome.</p>
+          <p class="field-help" id="make-help">Search current, international, and historical makes, or enter your own. You can leave all vehicle details blank.</p>
           <label class="fld fld--short"><span>Mileage <em>(optional)</em></span><input name="miles" inputmode="numeric" placeholder="84,000"></label>
-          <datalist id="makes"></datalist>
+          <datalist id="vehicle-years"></datalist>
         </fieldset>
 
         <fieldset class="ro__sec" data-sec="service">
-          <legend><span>02</span>Service needed</legend>
+          <legend><span>02</span>How can we help?</legend>
+          <div class="seg inquiry-type" role="radiogroup" aria-label="Request type">
+            <label><input type="radio" name="inquiry" value="service" checked><span>Service Request</span></label>
+            <label><input type="radio" name="inquiry" value="consultation"><span>General Consultation</span></label>
+          </div>
+          <p class="field-help" id="inquiry-help">Choose a service if you know what you need, or describe the problem below.</p>
+          <div id="service-picker">
           <div class="picked" id="picked" aria-live="polite"></div>
           <div class="fld fld--add">
             <label for="add-service" class="sr">Add a service</label>
@@ -296,7 +310,7 @@
         </fieldset>
 
         <fieldset class="ro__sec" data-sec="issue">
-          <legend><span>03</span>What's going on? <em>(optional)</em></legend>
+          <legend><span>03</span>What's going on?</legend>
           <div class="chips" role="group" aria-label="Symptoms">
             <label><input type="checkbox" name="sym" value="Warning light"><span>Warning light</span></label>
             <label><input type="checkbox" name="sym" value="Strange noise"><span>Strange noise</span></label>
@@ -307,11 +321,11 @@
             <label><input type="checkbox" name="sym" value="Pulls to one side"><span>Pulls to one side</span></label>
             <label><input type="checkbox" name="sym" value="A/C not cold"><span>A/C not cold</span></label>
           </div>
-          <label class="fld"><span>Details</span><textarea name="notes" rows="3" placeholder="Squealing from the front when I brake, started last week."></textarea></label>
+          <label class="fld"><span>Details <em>(or choose a symptom above)</em></span><textarea name="notes" rows="3" placeholder="Squealing from the front when I brake, started last week."></textarea></label>
         </fieldset>
 
         <fieldset class="ro__sec" data-sec="time">
-          <legend><span>04</span>Preferred drop-off</legend>
+          <legend><span>04</span>Preferred drop-off <em>(optional)</em></legend>
           <div class="grid grid--2">
             <label class="fld"><span>Date</span><input type="date" name="date"></label>
             <div class="fld"><span id="tod-l">Time of day</span>
@@ -331,8 +345,8 @@
         <fieldset class="ro__sec" data-sec="contact">
           <legend><span>05</span>Contact</legend>
           <div class="grid grid--2">
-            <label class="fld"><span>Full name</span><input name="name" autocomplete="name" required placeholder="Your name"></label>
-            <label class="fld"><span>Mobile phone</span><input name="phone" type="tel" autocomplete="tel" inputmode="tel" required placeholder="Mobile number"></label>
+            <label class="fld"><span>Full name</span><input name="name" autocomplete="name" required placeholder="Jordan Miller"></label>
+            <label class="fld"><span>Mobile phone</span><input name="phone" type="tel" autocomplete="tel" inputmode="tel" required placeholder="(614) 555-0199"></label>
           </div>
           <label class="fld"><span>Email <em>(optional)</em></span><input name="email" type="email" autocomplete="email" placeholder="you@example.com"></label>
           <div class="seg seg--wide" role="radiogroup" aria-label="Best way to reach you">
@@ -346,14 +360,14 @@
       <footer class="ro__foot">
         <p class="ro__summary" id="ro-summary">No service selected yet</p>
         <p class="ro__err" id="ro-err" role="alert"></p>
-        <button class="btn btn--red btn--xl ro__submit" type="submit">Send Request (Demo)<svg class="i i--arrow" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h13M13 6l6 6-6 6"/></svg></button>
+        <button class="btn btn--red btn--xl ro__submit" type="submit">Preview Request<svg class="i i--arrow" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h13M13 6l6 6-6 6"/></svg></button>
       </footer>
 
       <div class="ro__done" id="ro-done" hidden>
-        <div class="ro__stamp" aria-hidden="true">Demo</div>
-        <h3>This is a demo form.</h3>
-        <p>Your request was <strong>not sent</strong> and nothing was saved. Online scheduling isn't connected yet — in the final site, this is where the shop would receive your request (sample reference <strong id="ro-done-no"></strong>).</p>
-        <p class="ro__preview">Design preview only. No information left your browser.</p>
+        <div class="ro__stamp" aria-hidden="true">Demo Only</div>
+        <h3>Preview complete.</h3>
+        <p>Repair order <strong id="ro-done-no"></strong> passed the form checks. This is a demonstration: no request was sent, no information was saved, and no appointment was booked.</p>
+        <p class="ro__preview">Design preview: no information was sent or stored.</p>
         <button class="btn btn--ghost btn--xl" type="button" data-close>Done</button>
       </div>
     </div>
@@ -361,7 +375,15 @@
 </dialog>
 
 <script src="assets/catalog.js"></script>
+<script src="assets/service-routes.js"></script>
 <script src="live.js"></script>
+<script src="assets/vehicle-makes.js"></script>
 <script src="app.js"></script>
+<script src="shop-hours-config.js"></script>
+<script src="shop-hours.js"></script>
+<div class="phone-notice" id="phone-notice" popover role="status">
+  <p><strong>Demo number</strong><br>(614) 555-0142 is a placeholder. Calling is unavailable until the shop’s phone number is confirmed.</p>
+  <button type="button" class="btn btn--red" popovertarget="phone-notice" popovertargetaction="hide">Close</button>
+</div>
 </body>
 </html>

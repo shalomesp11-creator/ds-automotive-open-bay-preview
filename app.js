@@ -4,6 +4,10 @@
   const $ = (s, el = document) => el.querySelector(s);
   const $$ = (s, el = document) => [...el.querySelectorAll(s)];
   const data = window.CATALOG || [];
+  const esc = s => s.replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+  const appRoot = new URL('.', document.currentScript.src);
+  const route = id => new URL(window.SERVICE_ROUTES?.[id]?.url || 'index.html#services', appRoot).href;
+  let selectCategory = () => {};
 
   /* ------------------------------------------------------------ Icons */
   // Original line icons on a 24px grid, one per service category.
@@ -53,15 +57,17 @@
 
   /* ------------------------------------------------------ Service menu */
   const list = $('#cats'), panel = $('#panel'), search = $('#search');
+  if (list && panel && search) {
   let current = '01';
   data.forEach(c => {
     const li = document.createElement('li');
-    li.innerHTML = `<button type="button" class="cat" data-id="${c.id}"><span class="cat__no">${c.id}</span><span class="cat__name">${nameOf(c)}</span><span class="cat__dots" aria-hidden="true"></span><span class="cat__n">${c.services.length}</span></button>`;
+    li.innerHTML = `<div class="cat-entry"><button type="button" class="cat" data-id="${c.id}" title="Show ${esc(nameOf(c))} services in the catalog" aria-label="Show ${esc(nameOf(c))} services"><span class="cat__no">${c.id}</span></button><a class="cat-entry__name" href="${route(c.id)}"><span>${nameOf(c)}</span><span class="cat__n">${c.services.length}</span></a></div>`;
     list.append(li);
   });
   list.addEventListener('click', e => { const b = e.target.closest('.cat'); if (b) setCat(b.dataset.id); });
 
   function setCat(id) { current = id; search.value = ''; render(); }
+  selectCategory = setCat;
 
   const SYN = {
     'check': ['diagnostic', 'inspection'], 'engine light': ['diagnostic'], 'ac': ['a/c'], 'air': ['a/c', 'air'],
@@ -78,7 +84,6 @@
       return alts.some(a => hay.includes(a));
     });
   }
-  const esc = s => s.replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
   function hl(name, q) {
     let out = esc(name);
     q.toLowerCase().split(/\s+/).filter(t => t.length > 1).forEach(t => {
@@ -87,7 +92,7 @@
     });
     return out;
   }
-  const row = (s, q) => `<li><button type="button" class="svc" data-service="${esc(s.name)}"><span class="svc__id">${s.id}</span><span class="svc__name">${q ? hl(s.name, q) : esc(s.name)}</span><span class="svc__go">Request<svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h13M13 6l6 6-6 6"/></svg></span></button></li>`;
+  const row = (s, q) => `<li class="svc-row"><a class="svc svc--learn" href="${route(s.id)}"><span class="svc__id">${s.id}</span><span class="svc__name">${q ? hl(s.name, q) : esc(s.name)}</span><span class="svc__go">Learn More</span></a><button type="button" class="svc-request" data-service="${esc(s.name)}" aria-label="Request ${esc(s.name)}">Request Service <span aria-hidden="true">↗</span></button></li>`;
 
   function render() {
     const q = search.value.trim();
@@ -100,7 +105,7 @@
           <span class="panel__icon">${icon(c.id)}</span>
           <div>
             <p class="panel__kicker">Category ${c.id} · ${c.services.length} services</p>
-            <h3>${nameOf(c)}</h3>
+            <h3><a href="${route(c.id)}">${nameOf(c)}</a></h3>
             <p class="panel__blurb">${BLURB[c.id] || ''}</p>
           </div>
         </header>
@@ -127,29 +132,119 @@
     if (e.key === '/' && !ro.open && !/INPUT|TEXTAREA|SELECT/.test(document.activeElement.tagName)) { e.preventDefault(); search.focus(); }
   });
   render();
+  }
 
   /* --------------------------------------------------- Mobile menu */
   const menuBtn = $('[data-menu]');
-  function closeMenu() { document.body.classList.remove('menu-open'); menuBtn?.setAttribute('aria-expanded', 'false'); }
+  function closeMenu() {
+    document.body.classList.remove('menu-open');
+    menuBtn?.setAttribute('aria-expanded', 'false');
+    menuBtn?.setAttribute('aria-label', 'Open menu');
+  }
   menuBtn?.addEventListener('click', () => {
     const open = !document.body.classList.contains('menu-open');
     document.body.classList.toggle('menu-open', open); menuBtn.setAttribute('aria-expanded', String(open));
+    menuBtn.setAttribute('aria-label', open ? 'Close menu' : 'Open menu');
   });
   $$('.nav a').forEach(a => a.addEventListener('click', closeMenu));
+  document.addEventListener('keydown', e => {
+    if (!document.body.classList.contains('menu-open')) return;
+    if (e.key === 'Escape') { closeMenu(); menuBtn.focus(); }
+    if (e.key === 'Tab') {
+      const controls = [...$$('.masthead a, .masthead button')].filter(el => el.getClientRects().length && getComputedStyle(el).visibility !== 'hidden');
+      const first = controls[0], last = controls[controls.length - 1];
+      if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
+      else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
+    }
+  });
+  matchMedia('(min-width: 1201px)').addEventListener('change', e => { if (e.matches) closeMenu(); });
 
   /* ---------------------------------------------- Repair Order dialog */
   const ro = $('#ro'), form = $('#ro-form'), picked = $('#picked');
+  function fitRequestViewport() {
+    const viewport = window.visualViewport;
+    ro.style.setProperty('--ro-viewport', `${viewport ? viewport.height : innerHeight}px`);
+    ro.style.setProperty('--ro-offset', `${viewport ? viewport.offsetTop : 0}px`);
+  }
+  window.visualViewport?.addEventListener('resize', fitRequestViewport);
+  window.visualViewport?.addEventListener('scroll', fitRequestViewport);
+  fitRequestViewport();
   const all = data.flatMap(c => c.services.map(s => s.name));
-  const yearSel = form.elements.year;
-  for (let y = 2027; y >= 1980; y--) yearSel.add(new Option(String(y), String(y)));
-  $('#makes').innerHTML = ['Acura', 'Buick', 'Cadillac', 'Chevrolet', 'Chrysler', 'Dodge', 'Ford', 'GMC', 'Honda', 'Hyundai', 'Infiniti', 'Jeep', 'Kia', 'Lexus', 'Lincoln', 'Mazda', 'Mitsubishi', 'Nissan', 'Ram', 'Subaru', 'Tesla', 'Toyota', 'Volkswagen', 'Volvo'].map(m => `<option value="${m}">`).join('');
+  const maxYear = new Date().getFullYear() + 1;
+  $('#vehicle-years').innerHTML = Array.from({ length: maxYear - 1885 }, (_, i) => `<option value="${maxYear - i}">`).join('');
+  const makeInput = form.elements.make, makeMenu = $('#make-menu'), makeOptions = $('#make-options');
+  const clearMake = $('#clear-make');
+  const normalizeMake = value => value.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase().replace(/[^a-z0-9]/g, '');
+  const makes = (window.VEHICLE_MAKES || []).map(m => ({ ...m, terms: [m.name, ...m.aliases].map(normalizeMake) }));
+  let makeResults = [], activeMake = -1;
+  function closeMakes() {
+    makeMenu.hidden = true; makeInput.setAttribute('aria-expanded', 'false');
+    makeInput.removeAttribute('aria-activedescendant'); activeMake = -1;
+  }
+  function renderMakes() {
+    const q = normalizeMake(makeInput.value);
+    makeResults = makes.filter(m => !q || m.terms.some(term => term.includes(q)));
+    if (q) {
+      const rank = m => m.terms[0].startsWith(q) ? 0 : m.terms[0].includes(q) ? 1 : 2;
+      makeResults.sort((a, b) => rank(a) - rank(b));
+    }
+    activeMake = -1;
+    makeOptions.innerHTML = makeResults.map((m, i) => `<li role="option" id="make-option-${i}" aria-selected="false" data-make-index="${i}">${esc(m.name)}</li>`).join('');
+    $('#make-empty').hidden = !!makeResults.length;
+    $('#make-status').textContent = `${makeResults.length} matching makes. Use up and down arrows to browse. You can also keep your own entry.`;
+    clearMake.hidden = !makeInput.value;
+    makeMenu.hidden = false; makeOptions.scrollTop = 0;
+    makeInput.setAttribute('aria-expanded', 'true'); makeInput.removeAttribute('aria-activedescendant');
+  }
+  function chooseMake(i) {
+    makeInput.value = makeResults[i].name; clearMake.hidden = false; closeMakes(); progress(); makeInput.focus();
+  }
+  makeInput.addEventListener('focus', renderMakes);
+  makeInput.addEventListener('click', renderMakes);
+  makeInput.addEventListener('input', renderMakes);
+  makeInput.addEventListener('keydown', e => {
+    if (e.isComposing) return;
+    if (e.key === 'Escape' && !makeMenu.hidden) { e.preventDefault(); e.stopPropagation(); closeMakes(); }
+    else if (e.key === 'Tab') closeMakes();
+    else if (e.key === 'ArrowDown' || e.key === 'ArrowUp') {
+      e.preventDefault(); if (makeMenu.hidden) renderMakes();
+      if (!makeResults.length) return;
+      activeMake = activeMake < 0
+        ? (e.key === 'ArrowDown' ? 0 : makeResults.length - 1)
+        : (activeMake + (e.key === 'ArrowDown' ? 1 : -1) + makeResults.length) % makeResults.length;
+      [...makeOptions.children].forEach((el, i) => el.setAttribute('aria-selected', String(i === activeMake)));
+      const option = makeOptions.children[activeMake];
+      makeInput.setAttribute('aria-activedescendant', option.id); option.scrollIntoView({ block: 'nearest' });
+    } else if (e.key === 'Enter') {
+      e.preventDefault(); if (!makeMenu.hidden && activeMake >= 0) chooseMake(activeMake); else closeMakes();
+    }
+  });
+  // Keep keyboard focus on the combobox while tapping or clicking an option.
+  // Safari synthesizes mouse events after touch; prevent that focus change,
+  // while leaving touch/pointer events available for native list scrolling.
+  makeOptions.addEventListener('mousedown', e => e.preventDefault());
+  makeOptions.addEventListener('click', e => { const option = e.target.closest('[data-make-index]'); if (option) chooseMake(Number(option.dataset.makeIndex)); });
+  clearMake.addEventListener('click', () => { makeInput.value = ''; makeInput.focus(); renderMakes(); progress(); });
+  // Collapse after the outside control receives its click. Collapsing on blur
+  // or pointerdown would move controls before Safari finishes the tap.
+  ro.addEventListener('click', e => { if (!e.target.closest('.make-field')) closeMakes(); });
+  function updateInquiry() {
+    const consultation = form.elements.inquiry.value === 'consultation';
+    $('#service-picker').hidden = consultation;
+    $('[data-sec="time"]').hidden = consultation;
+    $('#inquiry-help').textContent = consultation
+      ? 'Ask a question or describe the problem below. No service or vehicle details are required.'
+      : 'Choose a service if you know what you need, or describe the problem below.';
+    progress();
+  }
+  $$('[name="inquiry"]').forEach(input => input.addEventListener('change', updateInquiry));
   $('#all-services').innerHTML = all.map(n => `<option value="${esc(n)}">`).join('');
   let services = [];
 
   function chips() {
     picked.innerHTML = services.length
       ? services.map(n => `<span class="pick">${esc(n)}<button type="button" aria-label="Remove ${esc(n)}" data-remove="${esc(n)}">×</button></span>`).join('')
-      : `<span class="pick pick--empty">No service selected — add one below, or check the box if you're not sure.</span>`;
+      : `<span class="pick pick--empty">No service selected. Add one below, or simply describe the problem.</span>`;
     progress();
   }
   picked.addEventListener('click', e => { const b = e.target.closest('[data-remove]'); if (b) { services = services.filter(s => s !== b.dataset.remove); chips(); } });
@@ -164,22 +259,23 @@
   function progress() {
     const f = form.elements;
     const done = {
-      vehicle: f.year.value && f.make.value.trim() && f.model.value.trim(),
-      service: services.length || f.unsure.checked,
+      vehicle: f.year.value || f.make.value.trim() || f.model.value.trim(),
+      service: f.inquiry.value === 'consultation' || services.length || f.unsure.checked,
       issue: $$('[name=sym]:checked', form).length || f.notes.value.trim(),
       time: f.date.value,
       contact: f.name.value.trim() && f.phone.value.replace(/\D/g, '').length >= 10,
     };
     $$('.ro__steps li', form).forEach(li => li.classList.toggle('done', !!done[li.dataset.step]));
     const veh = [f.year.value, f.make.value.trim(), f.model.value.trim()].filter(Boolean).join(' ');
-    const svc = services.length ? `${services.length} ${services.length === 1 ? 'service' : 'services'}` : (f.unsure.checked ? 'Diagnosis needed' : 'No service selected yet');
+    const svc = f.inquiry.value === 'consultation' ? 'General Consultation' : services.length ? `${services.length} ${services.length === 1 ? 'service' : 'services'}` : (f.unsure.checked ? 'Diagnosis needed' : 'No service selected yet');
     $('#ro-summary').innerHTML = `<strong>${esc(svc)}</strong>${veh ? ' · ' + esc(veh) : ''}`;
   }
   form.addEventListener('input', progress);
   form.addEventListener('change', progress);
 
   function openRO(service) {
-    form.reset(); services = []; $('#ro-err').textContent = '';
+    form.reset(); closeMakes(); clearMake.hidden = true; services = []; $('#ro-err').textContent = '';
+    updateInquiry(); picked.classList.remove('is-bad');
     $$('[aria-invalid]', form).forEach(el => el.removeAttribute('aria-invalid'));
     if (service) services.push(service);
     $('#ro-no').textContent = 'DS-' + String(Math.floor(10000 + Math.random() * 89999));
@@ -191,25 +287,30 @@
     $('.ro__body', form).scrollTop = 0;
   }
   window.openRequest = openRO;
-  $$('[data-request]').forEach(b => b.addEventListener('click', () => openRO('')));
+  $$('[data-request]').forEach(b => b.addEventListener('click', () => { closeMenu(); openRO(b.dataset.service || ''); }));
   const close = () => ro.close();
   $$('[data-close]', ro).forEach(b => b.addEventListener('click', close));
-  ro.addEventListener('close', () => document.body.classList.remove('ro-open'));
+  ro.addEventListener('close', () => { document.body.classList.remove('ro-open'); closeMakes(); form.reset(); services = []; });
   ro.addEventListener('click', e => { if (e.target === ro) close(); });
 
   form.addEventListener('submit', e => {
     e.preventDefault();
     const f = form.elements, bad = [];
-    const need = [[f.year, !f.year.value], [f.make, !f.make.value.trim()], [f.model, !f.model.value.trim()],
-      [f.name, !f.name.value.trim()], [f.phone, f.phone.value.replace(/\D/g, '').length < 10]];
-    need.forEach(([el, isBad]) => { el.toggleAttribute('aria-invalid', isBad); if (isBad) bad.push(el); });
-    const noSvc = !services.length && !f.unsure.checked;
-    picked.classList.toggle('is-bad', noSvc);
-    if (bad.length || noSvc) {
-      $('#ro-err').textContent = noSvc && !bad.length ? 'Add a service, or check “I’m not sure.”' : 'Please complete the highlighted fields.';
-      (bad[0] || add).focus();
-      return;
+    const year = f.year.value.trim(), email = f.email.value.trim();
+    const need = [
+      [f.year, !!year && (!/^\d{4}$/.test(year) || Number(year) < 1886 || Number(year) > maxYear), `Enter a vehicle year from 1886 to ${maxYear}, or leave it blank.`],
+      [f.notes, !f.notes.value.trim() && !$$('[name=sym]:checked', form).length, 'Describe your question or problem, or choose a symptom.'],
+      [f.name, !f.name.value.trim(), 'Enter your name.'],
+      [f.phone, f.phone.value.replace(/\D/g, '').length < 10 || f.phone.value.replace(/\D/g, '').length > 15, 'Enter a valid phone number, including the area code.'],
+      [f.email, (!!email && !f.email.validity.valid) || (f.via.value === 'Email' && !email), 'Enter a valid email address, or choose a call or text.'],
+      [f.date, f.inquiry.value !== 'consultation' && !!f.date.value && !f.date.validity.valid, 'Choose an available future date, or leave the date blank.']
+    ];
+    need.forEach(([el, isBad]) => { if (isBad) { el.setAttribute('aria-invalid', 'true'); el.setAttribute('aria-describedby', 'ro-err'); bad.push(el); } else { el.removeAttribute('aria-invalid'); if (el.getAttribute('aria-describedby') === 'ro-err') el.removeAttribute('aria-describedby'); } });
+    if (bad.length) {
+      $('#ro-err').textContent = need.filter(([, invalid]) => invalid).map(([, , message]) => message).join(' ');
+      bad[0].focus(); return;
     }
+    closeMakes(); $('#ro-err').textContent = '';
     $('#ro-done-no').textContent = $('#ro-no').textContent;
     $('#ro-done').hidden = false; form.classList.add('is-done');
     $('#ro-done .btn').focus();
@@ -218,5 +319,5 @@
   // Deep links used by the preview pages: #request or #request=Service%20Name
   const h = decodeURIComponent(location.hash || '');
   if (h.startsWith('#request')) openRO(h.split('=')[1] || '');
-  if (h.startsWith('#cat=')) { setCat(h.slice(5)); document.getElementById('services').scrollIntoView(); }
+  if (h.startsWith('#cat=') && $('#services')) { selectCategory(h.slice(5)); $('#services').scrollIntoView(); }
 })();
