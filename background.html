@@ -1,0 +1,106 @@
+<!doctype html>
+<html lang="en-US">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Open Bay — Live Environment</title>
+<link rel="stylesheet" href="styles.css">
+<style>
+  body { background: var(--navy-950); min-height: 100vh; display: grid; grid-template-rows: auto 1fr; }
+  .bgx-top { display: flex; align-items: center; gap: 24px; padding: 18px 32px; color: #C5CEDD; font-size: 13px; border-bottom: 1px solid rgba(255,255,255,.08); }
+  .bgx-top h1 { font: 900 24px/1 var(--display); letter-spacing: .08em; text-transform: uppercase; color: #fff; }
+  .bgx-top .motion { position: static; margin-left: auto; }
+  .bgx { display: grid; grid-template-columns: minmax(0, 1fr) 340px; min-height: 0; }
+  .bgx-scene { position: relative; overflow: hidden; isolation: isolate; min-height: 720px; }
+  .bgx-scene .facade__apron { height: 90px; }
+  .bgx-stage { position: absolute; left: 50%; top: 40px; bottom: 30px; width: min(1000px, 90%); transform: translateX(-50%); }
+  .bgx-stage .flag { width: 360px; bottom: 50px; }
+  .bgx-stage .flag__cloth { width: 350px; height: 236px; }
+  .bgx-stage .bay { left: 56px; top: 96px; bottom: 74px; }
+  .bgx-stage .bay__fascia { height: 56px; }
+  .bgx-stage .neon { position: absolute; right: 0; top: 18px; }
+  .legend { background: #0E1A30; color: #C5CEDD; padding: 30px 28px; display: grid; align-content: start; gap: 22px; font-size: 14px; line-height: 1.5; border-left: 1px solid rgba(255,255,255,.08); }
+  .legend h2 { font: 900 30px/1 var(--display); text-transform: uppercase; color: #fff; letter-spacing: .03em; }
+  .legend ol { list-style: none; margin: 0; padding: 0; display: grid; gap: 16px; }
+  .legend li { display: grid; grid-template-columns: 30px 1fr; gap: 12px; }
+  .legend li > span { display: grid; place-items: center; width: 30px; height: 30px; border-radius: 50%; background: var(--red-600); color: #fff; font: 800 15px/1 var(--stencil); }
+  .legend strong { display: block; color: #fff; font-weight: 700; }
+  .gauge { display: grid; gap: 8px; padding: 16px; border: 1px solid rgba(255,255,255,.12); border-radius: 4px; }
+  .gauge b { font: 500 11px/1 var(--mono); letter-spacing: .12em; text-transform: uppercase; color: var(--navy-300); }
+  .gauge__bar { height: 8px; border-radius: 4px; background: rgba(255,255,255,.08); overflow: hidden; }
+  .gauge__bar i { display: block; height: 100%; width: 50%; background: linear-gradient(90deg, #fff, var(--red-500)); border-radius: 4px; }
+  .gauge__v { font: 800 26px/1 var(--display); color: #fff; }
+  .rules { font-size: 12.5px; color: #8E9CB6; border-top: 1px solid rgba(255,255,255,.08); padding-top: 18px; }
+  @media (max-width: 960px) { .bgx { grid-template-columns: 1fr; } .bgx-scene { min-height: 560px; } .bgx-stage .flag { width: 220px; } .bgx-stage .flag__cloth { width: 212px; height: 146px; } .bgx-stage .bay { left: 34px; top: 72px; } .bgx-stage .bay__clear { display: none; } }
+</style>
+</head>
+<body>
+<header class="bgx-top">
+  <h1>Open Bay · Live Environment</h1>
+  <span>D&amp;S Automotive Repair Solutions — background study</span>
+  <button class="motion" type="button" data-motion-toggle aria-pressed="false"><span class="motion__ic" aria-hidden="true"></span><span data-motion-label>Pause motion</span></button>
+</header>
+<div class="bgx">
+  <div class="bgx-scene">
+    <div class="facade" aria-hidden="true">
+      <div class="facade__ribs" style="-webkit-mask:none;mask:none"></div>
+      <div class="facade__cloud facade__cloud--a"></div>
+      <div class="facade__cloud facade__cloud--b"></div>
+      <div class="facade__sun"></div>
+      <div class="facade__apron"></div>
+    </div>
+    <div class="bgx-stage">
+      <span class="neon" aria-hidden="true"><span>Open</span></span>
+      <div class="flag" aria-hidden="true">
+        <span class="flag__finial"></span><span class="flag__pole"></span>
+        <canvas class="flag__cloth" data-live="flag"></canvas>
+      </div>
+      <figure class="bay" aria-label="Service bay with a pickup truck inside">
+        <div class="bay__fascia">
+          <span class="bay__no">Bay 1</span>
+          <span class="bay__sign">Service<br>Entrance</span>
+          <span class="bay__clear">Demo Preview</span>
+        </div>
+        <div class="bay__frame">
+          <div class="bay__coil" aria-hidden="true"></div>
+          <div class="bay__opening">
+            <img src="assets/bay-raptor.jpg" alt="A black Ford F-150 Raptor parked inside a service bay" width="2400" height="2300">
+            <canvas class="bay__light" data-live="bay" aria-hidden="true"></canvas>
+            <div class="bay__door" aria-hidden="true"><span class="bay__rail"></span></div>
+          </div>
+          <span class="bay__jamb bay__jamb--l" aria-hidden="true"><i class="bollard"></i></span>
+          <span class="bay__jamb bay__jamb--r" aria-hidden="true"><i class="bollard"></i></span>
+        </div>
+      </figure>
+    </div>
+  </div>
+  <aside class="legend">
+    <h2>One wind. One daylight. One shop.</h2>
+    <p>Every moving layer reads from the same simulated weather, so the storefront behaves like one real place instead of a stack of effects.</p>
+    <div class="gauge" aria-live="off">
+      <b>Wind right now</b>
+      <div class="gauge__bar"><i id="wind-bar"></i></div>
+      <span class="gauge__v" id="wind-v">— mph</span>
+    </div>
+    <ol>
+      <li><span>1</span><div><strong>Flag on the pole</strong>Real-time WebGL cloth: 50 stars and 13 stripes to U.S. Code proportions, lit and folded by the wind gusts.</div></li>
+      <li><span>2</span><div><strong>Roll-up door</strong>Rises once when the page loads and stays open. The bay is open for business.</div></li>
+      <li><span>3</span><div><strong>Bay lights &amp; dust</strong>Light shafts from the shop fixtures with dust drifting through them, pushed by the same wind.</div></li>
+      <li><span>4</span><div><strong>Daylight on steel</strong>Cloud shadows and a slow sun glint cross the corrugated siding.</div></li>
+      <li><span>5</span><div><strong>Neon OPEN sign</strong>Warms up on load, then flickers now and then like a real tube.</div></li>
+    </ol>
+    <p class="rules">No scroll effects, no parallax, no pointer tracking. Motion pauses for “Reduce motion” system settings, in background tabs, and with the Pause button.</p>
+  </aside>
+</div>
+<script src="live.js"></script>
+<script>
+  (function tick(){
+    const w = (window.DSLive && window.DSLive.wind) || 0;
+    const mph = Math.round(4 + w * 14);
+    document.getElementById('wind-bar').style.width = Math.round(w * 100) + '%';
+    document.getElementById('wind-v').textContent = mph + ' mph · ' + (w > .82 ? 'gusty' : w > .6 ? 'steady breeze' : 'light breeze');
+    setTimeout(tick, 250);
+  })();
+</script>
+</body>
+</html>
