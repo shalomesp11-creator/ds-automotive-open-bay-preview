@@ -226,14 +226,14 @@ h1, h2, h3, p { margin: 0; }
   background:
     linear-gradient(90deg, rgba(10,20,40,.10), transparent 12%, transparent 88%, rgba(10,20,40,.12)),
     repeating-linear-gradient(180deg, #F4F5F7 0 5px, #E3E6EA 5px 19px, #C3C9D0 19px 21px, #FAFBFC 21px 23px);
-  transform: translateY(0); transition: transform 2.4s cubic-bezier(.62,.02,.22,1); }
+  transform: translateY(-28%); transition: transform 1.7s cubic-bezier(.2,.7,.2,1); }
 .bay__rail { position: absolute; left: 0; right: 0; bottom: 0; height: 18px;
   background: linear-gradient(180deg, #D5DAE0, #9AA3AE); border-top: 2px solid #fff; }
 .bay__rail::after { content: ""; position: absolute; left: 50%; top: 5px; width: 64px; height: 5px; margin-left: -32px; border-radius: 3px; background: var(--red-600); }
 .is-open .bay__door { transform: translateY(calc(-100% + 16px)); }
 .bay__ticket { position: absolute; left: 22px; bottom: 22px; z-index: 3; display: grid; gap: 4px; padding: 12px 16px 12px 14px;
   background: rgba(255,255,255,.94); border-left: 4px solid var(--red-600); box-shadow: 0 14px 30px -14px rgba(0,0,0,.6);
-  opacity: 0; transform: translateY(10px); transition: opacity .8s ease 2.6s, transform .8s var(--ease) 2.6s; }
+  opacity: 0; transform: translateY(10px); transition: opacity .6s ease 1.4s, transform .6s var(--ease) 1.4s; }
 .is-open .bay__ticket { opacity: 1; transform: none; }
 .bay__ticket-k { font: 500 10.5px/1 var(--mono); letter-spacing: .14em; text-transform: uppercase; color: var(--red-600); }
 .bay__ticket-v { font: 800 19px/1 var(--display); letter-spacing: .04em; text-transform: uppercase; color: var(--navy-950); }
@@ -827,4 +827,47 @@ body.ro-open .dock { display: none; }
 }
 @media (max-width: 600px) {
   .masthead__cta { flex: 0 1 auto; min-width: 0; white-space: normal; line-height: 1.3; }
+}
+
+/* TASK 012: a clearer first view, with the existing OPEN BAY composition. */
+.masthead .nav { gap: 15px; }
+.nav a[aria-current="page"]::after { transform: scaleX(1); }
+.hero__l2 { font-size: clamp(26px, 2.5vw, 38px); line-height: 1.1; }
+@media (max-width: 1200px) {
+  .masthead .nav { gap: 0; }
+}
+@media (max-width: 860px) {
+  .hero { padding-top: 24px; }
+  .hero__l1 { font-size: min(18vw, 100px); }
+  .hero__l2 { font-size: clamp(22px, 5.8vw, 30px); }
+  .hero__stage { height: clamp(260px, 82vw, 420px); aspect-ratio: auto; flex: none; }
+}
+
+/* Family story: shared type, paper, navy and service-red. */
+.about-preview { padding-block: 80px; background: #fff; border-bottom: 1px solid var(--steel-200); }
+.about-preview__in { display: grid; grid-template-columns: minmax(0, .8fr) minmax(0, 1.2fr); gap: 64px; align-items: center; }
+.about-preview h2 { font: 900 clamp(44px, 5vw, 70px)/.95 var(--display); text-transform: uppercase; }
+.about-preview h2 em { font-style: normal; color: var(--red-600); }
+.about-preview__copy p { max-width: 62ch; color: var(--steel-700); font-size: 17px; line-height: 1.75; margin-bottom: 24px; }
+.about-preview .btn { min-height: 48px; }
+.about-intro h1 { max-width: none; margin-bottom: 0; }
+.about-story { max-width: 64ch; margin-inline: auto; padding-block: 60px; color: var(--steel-700); font-size: 18px; line-height: 1.85; }
+.about-story p { margin-bottom: 24px; }
+.about-story h2 { font: 800 clamp(32px, 4vw, 44px)/1.1 var(--display); color: var(--navy-950); margin-block: 40px 22px; }
+.about-story .about-story__signature { margin-top: 40px; margin-bottom: 14px; font-weight: 700; color: var(--navy-900); }
+.about-story .about-story__promise { margin-bottom: 0; padding-left: 24px; border-left: 4px solid var(--red-600); font: 800 clamp(30px, 3vw, 38px)/1.2 var(--display); color: var(--navy-950); }
+.about-next { padding: 32px; background: #fff; border-top: 3px solid var(--navy-900); display: flex; align-items: center; justify-content: space-between; gap: 32px; }
+.about-next h2 { font: 800 32px/1.15 var(--display); margin-top: 12px; }
+.about-next__actions { display: flex; flex-wrap: wrap; gap: 12px; flex-shrink: 0; }
+@media (max-width: 860px) {
+  .about-preview { padding-block: 48px; }
+  .about-preview__in { grid-template-columns: minmax(0, 1fr); gap: 24px; }
+  .about-preview__copy p { font-size: 16px; }
+  .about-story { padding-block: 36px 44px; font-size: 16px; line-height: 1.8; }
+  .about-story h2 { margin-top: 32px; }
+  .about-next { padding: 24px; flex-direction: column; align-items: stretch; gap: 24px; }
+}
+@media (max-width: 600px) {
+  .about-next__actions { flex-direction: column; }
+  .about-next .btn { width: 100%; }
 }

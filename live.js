@@ -312,7 +312,11 @@
     document.querySelectorAll('[data-motion-toggle]').forEach(b => b.addEventListener('click', () => setRunning(!env.running)));
     reduceQuery.addEventListener?.('change', e => setRunning(!e.matches));
     const img = document.querySelector('.bay img');
-    const go = () => setTimeout(openBay, env.running ? 450 : 0);
+    // Paint the partly open bay first, then start its reveal without a dead pause.
+    const go = () => {
+      if (!env.running) { openBay(); return; }
+      requestAnimationFrame(() => requestAnimationFrame(openBay));
+    };
     if (!img || img.complete) go(); else { img.addEventListener('load', go, { once: true }); img.addEventListener('error', go, { once: true }); }
     let rt = 0;
     addEventListener('resize', () => { clearTimeout(rt); rt = setTimeout(() => { parts.forEach(p => p.resize()); if (!env.running) renderStill(); }, 120); });
